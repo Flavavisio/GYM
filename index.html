@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="GYM Control — gestão de ginásios, clientes, acessos, mensalidades, CRM, PT e operações.">
+  <title>GYM Control · Login</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+<link rel="icon" href="assets/gym-control.svg" type="image/svg+xml"></head>
+<body>
+<div class="login-page">
+  <section class="login-hero">
+    <div>
+      <div class="login-brand">GYM CONTROL</div>
+      <div style="margin-top:70px">
+        <h1>Toda a gestão do ginásio. Num só lugar.</h1>
+        <p>Clientes, mensalidades, acessos Hikvision, CRM, receção, PT, avaliações e operação diária numa única plataforma.</p>
+        <div class="login-points">
+          <div class="login-point"><strong>Clientes 360º</strong><span>Contrato, pagamentos, acessos, PT e histórico.</span></div>
+          <div class="login-point"><strong>Acessos inteligentes</strong><span>Planos, horários, cartões, QR e reconhecimento facial.</span></div>
+          <div class="login-point"><strong>CRM comercial</strong><span>Leads, visitas trial, propostas e conversão.</span></div>
+          <div class="login-point"><strong>Gestão operacional</strong><span>Receção, relatórios, KPIs e controlo diário.</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="color:#94a3b8;font-size:13px">Versão de demonstração local · preparada para Supabase Auth</div>
+  </section>
+
+  <section class="login-panel-wrap">
+    <div class="login-panel">
+      <h2>Entrar no GYM Control</h2>
+      <div class="muted">Acesso de demonstração para testar as diferentes áreas.</div>
+
+      <form id="loginForm">
+        <label>Email</label>
+        <input id="email" type="email" autocomplete="username" required>
+        <div style="margin-top:12px">
+          <label>Palavra-passe</label>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </div>
+        <div id="loginError" class="hidden" style="margin-top:12px;padding:10px;border-radius:10px;background:#fee2e2;color:#991b1b">
+          Email ou palavra-passe incorretos.
+        </div>
+        <button class="btn primary" style="width:100%;margin-top:16px" type="submit">Entrar</button>
+      </form>
+
+      <div style="margin-top:22px">
+        <div class="muted" style="margin-bottom:8px">Entrar rapidamente como:</div>
+        <div class="login-role-grid">
+          <button class="login-role" data-demo-role="admin"><strong>Admin Ginásio</strong><span class="muted">Gestão completa</span></button>
+          <button class="login-role" data-demo-role="reception"><strong>Receção</strong><span class="muted">Entradas e clientes</span></button>
+          <button class="login-role" data-demo-role="client"><strong>Cliente</strong><span class="muted">Portal do membro</span></button>
+          <button class="login-role" data-demo-role="superadmin"><strong>Super Admin</strong><span class="muted">Licenças e ginásios</span></button>
+        </div>
+      </div>
+
+      <div class="login-footer">Demo: qualquer perfil usa a palavra-passe <strong>demo</strong>.</div>
+    </div>
+  </section>
+</div>
+<script src="assets/js/login.js"></script>
+<script src="assets/js/ui.js"></script></body>
+</html>

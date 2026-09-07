@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GYM Control · Hikvision</title><link rel="stylesheet" href="assets/css/app.css"><link rel="icon" href="assets/gym-control.svg" type="image/svg+xml"></head>
+<body><button class="btn light" onclick="GYM_SESSION.logout()" style="position:fixed;right:16px;bottom:16px;z-index:50">Sair</button><div class="layout">
+<aside class="sidebar"><div class="brand">GYM CONTROL</div><nav class="nav">
+<a href="admin.html">Dashboard</a><a href="clients.html">Clientes</a><a href="crm.html">CRM / Leads</a><a href="enrollment.html">Nova inscrição</a><a href="reception.html">Receção / Kiosk</a><a class="active" href="hikvision.html">Hikvision / Acessos</a><a href="reports.html">Relatórios</a><a href="client-portal.html">Portal Cliente</a><a href="super-admin.html">Super Admin</a>
+</nav></aside>
+<main class="main">
+<div class="topbar"><div><h1 style="margin:0">Hikvision / Controlo de Acessos</h1><div class="muted">Equipamentos, credenciais, grupos, horários e sincronização</div></div>
+<div class="toolbar"><button class="btn light" id="retryErrors">Repor erros em fila</button><button class="btn primary" id="processQueue">Processar fila</button></div></div>
+
+<div class="grid kpis">
+<div class="card kpi"><span class="muted">Terminais</span><strong id="stTerminals">0</strong></div>
+<div class="card kpi"><span class="muted">Online</span><strong id="stOnline">0</strong></div>
+<div class="card kpi"><span class="muted">Pendentes sync</span><strong id="stPending">0</strong></div>
+<div class="card kpi"><span class="muted">Erros</span><strong id="stErrors">0</strong></div>
+</div>
+
+<div class="card" style="margin-top:18px">
+<div class="section-title"><div><h2 style="margin:0">Terminais</h2><div class="muted">Estado e configuração dos equipamentos</div></div><button class="btn primary" id="addTerminal">Adicionar terminal</button></div>
+<div style="overflow:auto"><table><thead><tr><th>Terminal</th><th>Endereço</th><th>Porta</th><th>Estado</th><th>Última sync</th><th>Ações</th></tr></thead><tbody id="terminalRows"></tbody></table></div>
+</div>
+
+<div class="grid row" style="margin-top:18px">
+<div class="card"><div class="section-title"><div><h2 style="margin:0">Grupos de acesso</h2><div class="muted">Portas + horário</div></div><button class="btn light" id="addGroup">Novo grupo</button></div>
+<div style="overflow:auto"><table><thead><tr><th>Grupo</th><th>Horário</th><th>Portas</th><th>Pessoas</th></tr></thead><tbody id="groupRows"></tbody></table></div></div>
+<div class="card"><div class="section-title"><div><h2 style="margin:0">Horários</h2><div class="muted">Janelas de acesso</div></div><button class="btn light" id="addSchedule">Novo horário</button></div>
+<div style="overflow:auto"><table><thead><tr><th>Nome</th><th>Dias</th><th>Horas</th><th>Grupos</th></tr></thead><tbody id="scheduleRows"></tbody></table></div></div>
+</div>
+
+<div class="card" style="margin-top:18px"><div class="section-title"><div><h2 style="margin:0">Credenciais dos clientes</h2><div class="muted">Cartão, QR, face e grupo aplicado</div></div></div>
+<div style="overflow:auto"><table><thead><tr><th>Cliente</th><th>Grupo</th><th>Cartão</th><th>QR</th><th>Face</th><th></th></tr></thead><tbody id="credentialRows"></tbody></table></div></div>
+
+<div class="card" style="margin-top:18px"><div class="section-title"><div><h2 style="margin:0">Fila de sincronização</h2><div class="muted">Pendentes, sucesso e erros por terminal</div></div></div>
+<div style="overflow:auto"><table><thead><tr><th>Data</th><th>Cliente</th><th>Terminal</th><th>Operação</th><th>Estado</th><th>Erro</th></tr></thead><tbody id="queueRows"></tbody></table></div></div>
+
+<div class="card" style="margin-top:18px"><div class="section-title"><div><h2 style="margin:0">Histórico de comandos</h2><div class="muted">Rastreabilidade das operações enviadas</div></div></div>
+<div style="overflow:auto"><table><thead><tr><th>Data</th><th>Terminal</th><th>Cliente</th><th>Comando</th><th>Estado</th><th>Mensagem</th></tr></thead><tbody id="logRows"></tbody></table></div></div>
+</main></div>
+
+<div class="modal hidden" id="terminalModal"><div class="modal-box"><div class="space"><h2>Novo terminal Hikvision</h2><button class="btn light" id="closeTerminal">Fechar</button></div>
+<div class="row"><div><label>Nome</label><input id="tName" placeholder="Entrada Norte"></div><div><label>Modelo</label><input id="tModel" value="DS-K1T341"></div></div>
+<div class="row" style="margin-top:10px"><div><label>IP / hostname</label><input id="tIp" placeholder="192.168.1.210"></div><div><label>Porta</label><input id="tPort" type="number" value="80"></div></div>
+<div class="row" style="margin-top:10px"><div><label>Protocolo</label><select id="tProtocol"><option>http</option><option>https</option></select></div><div><label>Porta física / zona</label><select id="tDoor"><option value="main">Entrada Principal</option><option value="staff">Staff</option><option value="24h">Zona 24H</option></select></div></div>
+<div style="margin-top:10px"><label>Nº série</label><input id="tSerial" placeholder="Opcional"></div><div style="margin-top:14px;text-align:right"><button class="btn primary" id="saveTerminal">Guardar terminal</button></div></div></div>
+
+<div class="modal hidden" id="groupModal"><div class="modal-box"><div class="space"><h2>Novo grupo de acesso</h2><button class="btn light" id="closeGroup">Fechar</button></div>
+<div class="row"><div><label>Nome</label><input id="gName" placeholder="Premium Noite"></div><div><label>Horário</label><select id="gSchedule"></select></div></div>
+<div style="margin-top:12px"><strong>Portas</strong><div class="toolbar" style="margin-top:8px"><label><input type="checkbox" name="gdoor" value="main"> Entrada Principal</label><label><input type="checkbox" name="gdoor" value="staff"> Staff</label><label><input type="checkbox" name="gdoor" value="24h"> Zona 24H</label></div></div>
+<div style="margin-top:14px;text-align:right"><button class="btn primary" id="saveGroup">Guardar grupo</button></div></div></div>
+
+<div class="modal hidden" id="scheduleModal"><div class="modal-box"><div class="space"><h2>Novo horário</h2><button class="btn light" id="closeSchedule">Fechar</button></div>
+<div><label>Nome</label><input id="sName" placeholder="Seg-Sex 07h-22h"></div>
+<div class="row" style="margin-top:10px"><div><label>Início</label><input id="sStart" type="time" value="07:00"></div><div><label>Fim</label><input id="sEnd" type="time" value="22:00"></div></div>
+<div style="margin-top:12px"><strong>Dias</strong><div class="toolbar" style="margin-top:8px">
+<label><input type="checkbox" name="sday" value="1" checked> Seg</label><label><input type="checkbox" name="sday" value="2" checked> Ter</label><label><input type="checkbox" name="sday" value="3" checked> Qua</label><label><input type="checkbox" name="sday" value="4" checked> Qui</label><label><input type="checkbox" name="sday" value="5" checked> Sex</label><label><input type="checkbox" name="sday" value="6"> Sáb</label><label><input type="checkbox" name="sday" value="0"> Dom</label></div></div>
+<div style="margin-top:14px;text-align:right"><button class="btn primary" id="saveSchedule">Guardar horário</button></div></div></div>
+
+<script src="assets/js/app.js"></script><script src="assets/js/hikvision.js"></script><script src="assets/js/session.js"></script><script src="assets/js/ui.js"></script></body></html>
